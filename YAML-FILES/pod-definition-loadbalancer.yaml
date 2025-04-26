@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: nginx
+  namespace: dev
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: dev
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+# kubectl create namespace dev
+# kubectl create -f YAML-FILES/service-account-pod-definition.yaml
+# kubectl get svc -n dev
+
+# 🔁 Service (svc) vs ServiceAccount
+# 📦 Service (svc)
+# Purpose: Routes network traffic to Pods
+# Kind: Service
+# Used For: Exposing applications inside/outside the cluster
+# Scope: Handles networking
+# Example Use Case: Load balancing requests to NGINX Pods
+# Type Examples: ClusterIP, NodePort, LoadBalancer
+
+# 🔐 ServiceAccount
+# Purpose: Manages identity & permissions for Pods
+# Kind: ServiceAccount
+# Used For: Authenticating Pods to access the Kubernetes API
+# Scope: Handles security & access control
+# Example Use Case: Allowing a Pod to read Secrets via API
+# Type Examples: No types; just referenced by name
+

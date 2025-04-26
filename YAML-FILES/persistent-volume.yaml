@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/data
+
+# ✅ What Happens When You Apply This:
+# Kubernetes creates a PersistentVolume named local-pv
+# The storage will be at /mnt/data on the node
+# It’s now available to be claimed by a Pod or PVC (PersistentVolumeClaim)
+
+# 📦 What Is a PersistentVolume (PV)?
+# A PersistentVolume is a piece of storage in the cluster that has been provisioned 
+# by an admin or dynamically via storage classes. It abstracts the underlying 
+# physical storage and makes it available to Pods.
+
+# 🔍 Explanation of Fields:
+#      Field	                                 Meaning
+# capacity.storage: 1Gi	           The size of the volume (1 gigabyte)
+# accessModes	                     How the volume can be mounted. ReadWriteOnce means it can be mounted by a single node for read/write
+# hostPath	                       Refers to a local directory on the worker node’s filesystem (used for testing/demo only)
+
+# ⚠️ hostPath is not recommended in production because it tightly couples the Pod to a specific node.

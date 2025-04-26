@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+# What this does:
+# Creates a Pod named nginx-pod
+# Runs a container named nginx
+# Uses the nginx image
+# Exposes port 80 from the container
+
+# kubectl create -f YAML-FILES/pod-definition.yaml
+# kubectl get pod
+# kubectl describe pod <pod-name>
+# kubectl logs <pod-name>
+# kubectl logs <pod-name> --tail=100    --> Show only the last 100 lines
+# kubectl logs -f <pod-name>            --> Stream logs in real-time (like tail -f) 
+# kubectl get svc         --> this is how you application is exposed

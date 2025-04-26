@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-pod
+spec:
+  containers:
+    - name: app
+      image: busybox
+      command: ["sh", "-c", "env"]
+      envFrom:
+        - configMapRef:
+            name: app-config
+
+
+# kubectl logs configmap-pod
+# This Pod will read the APP_ENV and APP_DEBUG variables from the ConfigMap
+
+# 🔍 What This Does:
+# Field	                                           Meaning
+# kind: Pod	                      This creates a single Pod named configmap-pod
+# image: busybox	                A lightweight Linux image often used for testing
+# command: ["sh", "-c", "env"]	  Runs the env command inside the container to list environment variables
+# envFrom.configMapRef.name: app-config	  Tells the Pod to load all key-value pairs from the app-config ConfigMap as environment variables
+
+# 🎯 Why This Is Useful:
+# You can change app settings without rebuilding your container
+# You can re-use the same image for different environments (e.g., dev, test, prod)
+# It keeps configuration outside of code, which is cleaner and more secure

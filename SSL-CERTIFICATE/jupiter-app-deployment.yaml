@@ -1,0 +1,78 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jupiter
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupiter
+  namespace: jupiter
+  labels:
+    app: jupiter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jupiter
+  template:
+    metadata:
+      labels:
+        app: jupiter
+    spec:
+      containers:
+      - name: jupiter
+        image: africaprocloud/jupiter-app:1.0.1
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jupiter-svc
+  namespace: jupiter
+  labels:
+    app: jupiter
+spec:
+  type: NodePort
+  selector:
+    app: jupiter
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jupiter-ingress
+  namespace: jupiter
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:123456789012:certificate/your-cert-id
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/group.name: jupiter-group
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+spec:
+  ingressClassName: alb
+  rules:
+  - host: jupiter.yourdomain.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jupiter-svc
+            port:
+              number: 80

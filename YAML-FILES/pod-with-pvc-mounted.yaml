@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvc-pod
+spec:
+  containers:
+    - name: app
+      image: busybox
+      command: ["sh", "-c", "echo Hello from APCI > /data/hello.txt && sleep 3600"]
+      volumeMounts:
+        - mountPath: /data
+          name: storage
+  volumes:
+    - name: storage
+      persistentVolumeClaim:
+        claimName: local-pvc
+
+# 🔍 What This Does:
+#    Section	                                               Explanation
+# volumeMounts	                                       Mounts the volume into the container at the path /data
+# volumes.persistentVolumeClaim.claimName: local-pvc	 Uses the PVC created in number 9 (local-pvc)
+# command: ["sh", "-c", "echo Hello from APCI > /data/hello.txt && sleep 3600"]	  Writes a message to a file inside the mounted volume, then keeps the container alive for 1 hour
+
+# Check if the file exists:
+# kubectl exec -it pvc-pod -- sh -c "cat /data/hello.txt"
+
+
+# Delete and recreate the Pod — file will still be there (persistence in action!).
+
+# ✅ Result:
+# A file /data/hello.txt is created inside the PersistentVolume.
+# Even if the Pod is deleted and recreated, as long as the PVC is reattached, the file will persist.
+# This is useful for logs, database files, user uploads, etc.

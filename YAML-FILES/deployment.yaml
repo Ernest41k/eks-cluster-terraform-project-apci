@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:10008
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: dev
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+
+# kubectl creat -f YAML-FILE/deployment.yaml
+# kubectl get pod -n dev
+# kubectl get deployment -n dev
+# kubectl get replicaset -n dev
+# kubectl get svc -n dev
+
+# 🧠 What It Does (Line-by-Line Breakdown):
+# Section	Explanation
+# apiVersion: apps/v1	This uses the apps/v1 API group which supports Deployments.
+# kind: Deployment	You're creating a Deployment, which is a higher-level abstraction over Pods.
+# metadata.name: nginx-deployment	The name of this Deployment is nginx-deployment.
+# replicas: 2	You want 2 Pods to run with this configuration at all times.
+# selector.matchLabels.app: nginx	This tells Kubernetes how to identify the Pods managed by this Deployment.
+# template.metadata.labels.app: nginx |	The Pods created will have the label app=nginx—this must match the selector above.
+# template.spec.containers |	Defines what container to run in each Pod.
+# image: nginx:latest |	Uses the latest official NGINX Docker image.
+# containerPort: 80	Exposes port 80 inside the container (used by NGINX).
+
+# 🧩 Why Use a Deployment Instead of Just a Pod?
+#   Pod	                         Deployment
+
+# Ephemeral                 	Self-healing
+# Single instance	          Scalable (replicas)
+# Manual updates	         Supports rolling updates
+# No version tracking	    Can track revision history

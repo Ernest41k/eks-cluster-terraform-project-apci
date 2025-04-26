@@ -1,0 +1,4 @@
+volumes:
+  - name: cert
+    secret:
+      secretName: aws-load-balancer-tls

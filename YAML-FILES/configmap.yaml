@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_ENV: development
+  APP_DEBUG: "true"
+
+# 🔌 How It’s Used:
+# You don't run a ConfigMap. Instead, you reference it in a Pod or 
+# Deployment (like in example #5), usually by:
+# Mounting it as environment variables
+# Mounting it as files into a container
+
+# 🧠 What Is a ConfigMap?
+# A ConfigMap is a Kubernetes object used to store non-sensitive configuration data 
+# in key-value pairs. It’s typically used to decouple configuration from application 
+# code, which is a best practice in cloud-native architecture.
+
+# 🔍 What This ConfigMap Does:
+# Key	Value
+# APP_ENV	development
+# APP_DEBUG	true
+# This means your application can read environment variables named 
+# APP_ENV and APP_DEBUG with the values above.
+
+# ✅ Why Use a ConfigMap?
+# Makes your app configurable without changing container images
+# Helps promote 12-factor app principles
+# Keeps configuration clean and centralized

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  namespace: dev
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+
+# kubectl create namespace dev
+# kubectl apply -f YAML-FILES/namespace-nginx.yaml
+# kubectl get pods -n dev

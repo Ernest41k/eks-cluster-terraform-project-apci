@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP
+
+# kubectl get svc
+# kubectl get pods -l app=nginx
+# kubectl exec -it <any-pod> -- curl nginx-service
+
+
+# 🔍 What This Does:
+# Field	Meaning
+# apiVersion: v1	| Standard version for core resources like Services
+# kind: Service	| You are creating a Service, a stable way to access Pods
+# metadata.name: nginx-service	| The name of the Service
+# selector.app: nginx	| This links the Service to Pods with label app=nginx
+# ports.port: 80	| The port inside the cluster where the Service is exposed
+# targetPort: 80	| The port on the container that receives the traffic
+# type: ClusterIP	| This is the default type of Service — it exposes the app internally to the cluster (not public)
+
+# 🎯 What Happens When You Apply This File:
+# Kubernetes creates a virtual IP address (called a ClusterIP).
+# Traffic sent to nginx-service on port 80 will be load-balanced across all matching Pods (in this case, Pods with app=nginx).
+# This allows other Pods in the cluster to communicate with nginx without knowing Pod IPs.
+
